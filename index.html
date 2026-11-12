@@ -360,8 +360,7 @@ function telaPercurso() {
     ${v.paradas.map((p, i) => `<li class="${i === v.parada ? "eu" : ""}"><span class="h">${esc(p[0])}</span><span class="d" aria-hidden="true"></span>
       <span class="n">${i === v.parada ? `<b>${esc(p[1])}</b>` : esc(p[1])}<small>${i === v.parada ? L.vcAqui + " · " : ""}${esc(p[2])}</small></span></li>`).join("")}
     <li class="dest"><span></span><span class="d" aria-hidden="true"></span><span class="n"><b>${L.destino}</b><small>${L.destinoSub}</small></span></li>
-  </ol>
-  <p class="nota">${L.semNomes}</p></div>`;
+  </ol></div>`;
 }
 function telaObs() {
   const o = S.obs;
