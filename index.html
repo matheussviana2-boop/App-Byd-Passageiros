@@ -80,11 +80,11 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
 .viagem .ponto .mini{color:var(--muted);opacity:1}
 .viagem .ponto b{font-size:21px;line-height:1.25}
 .viagem .ponto span{color:var(--muted);font-size:15px}
-.fatos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-bottom:1px solid var(--line)}
+.fatos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--line)}
 .fatos div{padding:12px 6px;text-align:center}
 .fatos div+div{border-left:1px solid var(--line)}
 .fatos b{display:block;font-family:var(--f-num);font-weight:800;font-size:22px;line-height:1.15}
-.fatos small{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.fatos small{display:block;margin-bottom:2px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .acoes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .fim{margin-top:auto;display:flex;justify-content:space-between;align-items:center;font-size:14px;color:var(--muted)}
 .fim button{border:0;background:none;color:var(--plate);font-weight:700;cursor:pointer;padding:8px}
@@ -329,10 +329,10 @@ function telaLogin() {
 function cartaoViagem(v, i, varias) {
   const p = v.paradas[v.parada] || ["", "", "", ""];
   return `<section class="viagem">
-    <div class="fatos"><div><b>${esc(v.rota)}</b><small>${L.rota}</small></div><div><b>${esc(veicCap(L.veic(v.veic)))}</b><small>${L.veiculo}</small></div><div><b style="font-size:19px">${esc(v.emp || "—")}</b><small>${L.empresa}</small></div></div>
     <div class="cab"><div><div class="mini">${L.suaHora}</div><div class="hora">${esc(p[0])}</div></div>
       <div><div class="mini" style="text-align:right">${L.turno}</div><div class="turno">${esc(L.t(v.turno))}</div></div></div>
     <div class="ponto"><div class="mini">${L.seuPonto}</div><b>${esc(p[1])}</b><span>${esc([p[2], p[3]].filter(Boolean).join(" · "))}</span></div>
+    <div class="fatos"><div><small>${L.rota}</small><b>${esc(v.rota)}</b></div><div><small>${L.veiculo}</small><b>${esc(veicCap(L.veic(v.veic)))}</b></div><div><small>${L.empresa}</small><b style="font-size:19px">${esc(v.emp || "—")}</b></div></div>
     ${varias ? `<div style="padding:12px;border-top:1px solid var(--line)"><button class="btn" data-perc="${i}">${ICON.percurso}${L.percurso}</button></div>` : ""}
   </section>`;
 }
