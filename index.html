@@ -143,7 +143,7 @@ function toast(m) { const t = $("#toast"); t.textContent = m; t.hidden = false; 
 let LANG = store.get("lang", "pt") === "zh" ? "zh" : "pt";
 const TXT = {
   pt: {
-    btn: "中文", btnAria: "Mudar o idioma para mandarim", sub: "Veja o horário e o ponto de embarque da sua rota.",
+    btn: "中文", btnAria: "Mudar o idioma para mandarim", sub: "Seu transporte BYD na palma da mão.",
     matricula: "Matrícula", exMat: "Ex.: 12759", manter: "Manter conectado neste celular", entrar: "Entrar", entrando: "Entrando…",
     semMat: "Não sabe sua matrícula? Ela está no seu crachá BYD.",
     naoAchou: "<b>Matrícula não encontrada.</b> Confira o número. Se estiver certo, você ainda não está em nenhuma rota. Procure o setor de transporte da BYD.",
@@ -166,7 +166,7 @@ const TXT = {
     veic: v => v
   },
   zh: {
-    btn: "PT", btnAria: "Mudar o idioma para português", sub: "查看您路线的上车时间和上车地点。",
+    btn: "PT", btnAria: "Mudar o idioma para português", sub: "比亚迪班车，尽在掌握。",
     matricula: "工号", exMat: "例如：12759", manter: "在此手机上保持登录", entrar: "登录", entrando: "正在登录…",
     semMat: "不知道您的工号？请查看您的比亚迪工牌。",
     naoAchou: "<b>未找到该工号。</b> 请核对号码。如果号码正确，说明您还没有被安排到任何路线，请联系比亚迪交通部门。",
