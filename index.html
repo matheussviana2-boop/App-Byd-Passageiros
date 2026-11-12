@@ -54,6 +54,11 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
 .aviso.warn{background:var(--warn-bg);color:var(--warn)}
 .aviso.bad{background:var(--bad-bg);color:var(--bad)}
 .aviso ul{margin:6px 0 0;padding-left:18px}
+.cinto{background:#fff;border:2px solid #d32f2f;border-radius:14px;padding:10px 14px;display:flex;gap:12px;align-items:center;animation:pulso 2s ease-in-out infinite}
+.cinto .sel{width:42px;height:42px;border-radius:10px;background:#d32f2f;color:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+.cinto strong{color:#d32f2f;font-size:17px;font-weight:800}
+@keyframes pulso{0%,100%{box-shadow:0 0 0 0 rgba(211,47,47,.45)}50%{box-shadow:0 0 0 7px rgba(211,47,47,0)}}
+@media (prefers-reduced-motion:reduce){.cinto{animation:none}}
 /* login */
 .login{gap:0}
 .login .hero{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:48px;text-align:center}
@@ -74,7 +79,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
 .viagem .ponto .mini{color:var(--muted);opacity:1}
 .viagem .ponto b{font-size:21px;line-height:1.25}
 .viagem .ponto span{color:var(--muted);font-size:15px}
-.fatos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--line)}
+.fatos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-bottom:1px solid var(--line)}
 .fatos div{padding:12px 6px;text-align:center}
 .fatos div+div{border-left:1px solid var(--line)}
 .fatos b{display:block;font-family:var(--f-num);font-weight:800;font-size:22px;line-height:1.15}
@@ -150,7 +155,7 @@ const TXT = {
     digite: "Digite sua matrícula.", semRede: "Sem conexão. Verifique a internet e tente de novo.",
     ola: n => "Olá, <b>" + esc(n) + "</b>", atual: q => "Atualizado " + q, offline: q => "Sem conexão agora. Mostrando a consulta de " + q + ".",
     suaHora: "Seu horário de apanha", turno: "Turno", seuPonto: "Ponto de apanha", rota: "Rota", veiculo: "Veículo", empresa: "Empresa",
-    t: t => t, dica: "Esteja no ponto <b>5 minutos antes</b>. O transporte não espera.",
+    t: t => t, dica: "Esteja no ponto <b>5 minutos antes</b>.", cinto: "Utilize o cinto de segurança.",
     obs: "Observação", percurso: "Percurso", sair: "Sair", matriculaN: m => "Matrícula " + m,
     mudou: "Seu roteiro mudou", mudHora: (a, b) => "Horário de apanha: <s>" + esc(a) + "</s> → <b>" + esc(b) + "</b>",
     mudPonto: p => "Ponto de apanha: <b>" + esc(p) + "</b>", mudRota: (a, b) => "Rota: " + esc(a) + " → <b>" + esc(b) + "</b>", mudFica: "Este aviso fica por 3 dias.",
@@ -174,7 +179,7 @@ const TXT = {
     ola: n => "您好，<b>" + esc(n) + "</b>", atual: q => "更新于 " + q, offline: q => "目前没有网络，显示的是 " + q + " 的查询结果。",
     suaHora: "您的上车时间", turno: "班次", seuPonto: "上车地点", rota: "路线", veiculo: "车辆", empresa: "公司",
     t: t => ({ "Turno 1": "1班", "Turno 2": "2班", "Turno 3": "3班", "ADM": "行政班" })[t] || t,
-    dica: "请<b>提前 5 分钟</b>到达上车点，班车不会等候。",
+    dica: "请<b>提前 5 分钟</b>到达上车点。", cinto: "请系好安全带。",
     obs: "留言", percurso: "路线站点", sair: "退出", matriculaN: m => "工号 " + m,
     mudou: "您的路线有变动", mudHora: (a, b) => "上车时间：<s>" + esc(a) + "</s> → <b>" + esc(b) + "</b>",
     mudPonto: p => "上车地点：<b>" + esc(p) + "</b>", mudRota: (a, b) => "路线：" + esc(a) + " → <b>" + esc(b) + "</b>", mudFica: "此提示保留 3 天。",
@@ -323,10 +328,10 @@ function telaLogin() {
 function cartaoViagem(v, i, varias) {
   const p = v.paradas[v.parada] || ["", "", "", ""];
   return `<section class="viagem">
+    <div class="fatos"><div><b>${esc(v.rota)}</b><small>${L.rota}</small></div><div><b>${esc(veicCap(L.veic(v.veic)))}</b><small>${L.veiculo}</small></div><div><b style="font-size:19px">${esc(v.emp || "—")}</b><small>${L.empresa}</small></div></div>
     <div class="cab"><div><div class="mini">${L.suaHora}</div><div class="hora">${esc(p[0])}</div></div>
       <div><div class="mini" style="text-align:right">${L.turno}</div><div class="turno">${esc(L.t(v.turno))}</div></div></div>
     <div class="ponto"><div class="mini">${L.seuPonto}</div><b>${esc(p[1])}</b><span>${esc([p[2], p[3]].filter(Boolean).join(" · "))}</span></div>
-    <div class="fatos"><div><b>${esc(v.rota)}</b><small>${L.rota}</small></div><div><b>${esc(veicCap(L.veic(v.veic)))}</b><small>${L.veiculo}</small></div><div><b style="font-size:19px">${esc(v.emp || "—")}</b><small>${L.empresa}</small></div></div>
     ${varias ? `<div style="padding:12px;border-top:1px solid var(--line)"><button class="btn" data-perc="${i}">${ICON.percurso}${L.percurso}</button></div>` : ""}
   </section>`;
 }
@@ -338,6 +343,7 @@ function telaInicio() {
   ${mud ? `<div class="aviso warn" role="status">${ICON.alerta}<div><b>${L.mudou}</b><ul>${mud.itens.map(x => `<li>${x[0] === "hora" ? L.mudHora(x[1], x[2]) : x[0] === "ponto" ? L.mudPonto(x[1]) : L.mudRota(x[1], x[2])}</li>`).join("")}</ul><small>${L.mudFica}</small></div></div>` : ""}
   ${d.viagens.map((v, i) => cartaoViagem(v, i, varias)).join("")}
   <div class="aviso info">${ICON.relogio}<span>${L.dica}</span></div>
+  <div class="cinto" role="note"><span class="sel"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="4.5" r="2"/><path d="M8 21v-7a4 4 0 0 1 8 0v7"/><path d="M7 9l10 11"/></svg></span><strong>${L.cinto}</strong></div>
   <div class="acoes"><button class="btn" id="bobs">${ICON.obs}<span style="color:var(--fg)">${L.obs}</span></button>
     ${varias ? "" : `<button class="btn pri" data-perc="0">${ICON.percurso}${L.percurso}</button>`}</div>
   <div class="fim"><span>${L.matriculaN(esc(d.matricula))}</span><button id="bsair">${L.sair}</button></div></div>`;
