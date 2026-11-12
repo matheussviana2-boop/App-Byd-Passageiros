@@ -162,7 +162,7 @@ const TXT = {
     mudPonto: p => "Ponto de apanha: <b>" + esc(p) + "</b>", mudRota: (a, b) => "Rota: " + esc(a) + " → <b>" + esc(b) + "</b>", mudFica: "Este aviso fica por 3 dias.",
     voltar: "Meu roteiro", nParadas: n => n + " paradas", previstos: "Horários previstos de cada parada.",
     vcAqui: "Você embarca aqui", destino: "BYD Camaçari", destinoSub: "Destino final", semNomes: "Os nomes dos outros passageiros não aparecem.",
-    obsTit: "Enviar observação", obsSub: "Escreva o que precisa (por exemplo, mudar o ponto de apanha). A equipe de transporte vai retornar pelo celular.",
+    obsTit: "Enviar observação", obsSub: "Precisa ajustar algo no seu transporte? Conte para a gente aqui.",
     msg: "Observação", cel: "Celular para retorno", celAjuda: "Obrigatório, com DDD. É por ele que a equipe vai responder.", enviar: "Enviar", enviando: "Enviando…",
     obsVai: "Junto com a mensagem vão sua matrícula, nome, rota e ponto atual.",
     escreva: "Escreva sua observação.", celErr: "Informe um celular com DDD.",
@@ -186,7 +186,7 @@ const TXT = {
     mudPonto: p => "上车地点：<b>" + esc(p) + "</b>", mudRota: (a, b) => "路线：" + esc(a) + " → <b>" + esc(b) + "</b>", mudFica: "此提示保留 3 天。",
     voltar: "我的路线", nParadas: n => n + " 个站点", previstos: "各站点的预计时间。",
     vcAqui: "您在这里上车", destino: "比亚迪卡马萨里", destinoSub: "终点", semNomes: "不显示其他乘客的姓名。",
-    obsTit: "发送留言", obsSub: "写下您的需求（例如更换上车地点）。交通部门会通过手机回复您。",
+    obsTit: "发送留言", obsSub: "班车有需要调整的地方吗？请在这里告诉我们。",
     msg: "留言", cel: "回复用手机号", celAjuda: "必填，请包含区号。交通部门会通过此号码回复。", enviar: "发送", enviando: "正在发送…",
     obsVai: "留言会附带您的工号、姓名、路线和当前上车地点。",
     escreva: "请填写留言。", celErr: "请填写包含区号的手机号。",
@@ -375,8 +375,7 @@ function telaObs() {
       <input id="cel" type="tel" inputmode="tel" autocomplete="tel" placeholder="(71) 9 0000-0000" value="${esc(o.cel)}" aria-required="true">
       <span class="ajuda">${L.celAjuda}</span></div>
     <button class="btn pri" ${o.enviando ? "disabled" : ""}>${ICON.enviar}${o.enviando ? L.enviando : L.enviar}</button>
-  </form>
-  <p class="nota">${L.obsVai}</p></div>`;
+  </form></div>`;
 }
 function telaEnviado() {
   const e = S.enviado;
