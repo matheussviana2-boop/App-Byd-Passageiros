@@ -127,7 +127,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
 .opcao.destaque{border-color:var(--brand);border-width:2px}
 .opcao.apagada{opacity:.7}
 .badge{min-width:26px;height:26px;padding:0 8px;border-radius:13px;background:#d32f2f;color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex:none}
-.viagem .cab.he{background:var(--navy)}
 .viagem .cab.he .turno{font-size:22px}
 /* mensagens */
 .lista-msgs{display:flex;flex-direction:column;gap:10px}
@@ -187,9 +186,9 @@ const TXT = {
     mudPonto: p => "Ponto de apanha: <b>" + esc(p) + "</b>", mudRota: (a, b) => "Rota: " + esc(a) + " → <b>" + esc(b) + "</b>", mudFica: "Este aviso fica por 3 dias.",
     nParadas: n => n + " paradas", previstos: "Horários previstos de cada parada.",
     vcAqui: "Você embarca aqui", destino: "BYD Camaçari", destinoSub: "Destino final",
-    habitual: "Roteiro habitual", semHab: "Você não tem roteiro habitual.",
-    he: "Hora extra", heQtd: n => n === 0 ? "Nenhuma programada" : n === 1 ? "1 programada" : n + " programadas",
-    heVazio: "Você não tem hora extra programada no momento.", chegadaFab: "Chegada na fábrica", saidaFab: "Saída da fábrica",
+    roteiro: "Roteiro", habitual: "Roteiro habitual", semHab: "Você não tem roteiro habitual.",
+    he: "Hora extra", heRot: "Roteiro hora extra", heQtd: n => n === 0 ? "Nenhuma programada" : n === 1 ? "1 programada" : n + " programadas",
+    heVazio: "Você não está em nenhum roteiro de hora extra no momento.", chegadaFab: "Chegada na fábrica", saidaFab: "Saída da fábrica",
     msgs: "Mensagens", msgsQtd: (n, novas) => novas ? (novas === 1 ? "1 nova" : novas + " novas") : n ? "Nenhuma nova" : "Nenhuma mensagem",
     msgsVazio: "Nenhuma mensagem por enquanto.", nova: "Nova", deEquipe: "Equipe de transporte",
     modalTit: n => n > 1 ? "Você tem " + n + " mensagens novas" : "Você tem uma mensagem nova", entendi: "Entendi",
@@ -212,8 +211,8 @@ const TXT = {
     mudPonto: p => "上车地点：<b>" + esc(p) + "</b>", mudRota: (a, b) => "路线：" + esc(a) + " → <b>" + esc(b) + "</b>", mudFica: "此提示保留 3 天。",
     nParadas: n => n + " 个站点", previstos: "各站点的预计时间。",
     vcAqui: "您在这里上车", destino: "比亚迪卡马萨里", destinoSub: "终点",
-    habitual: "常规路线", semHab: "您没有常规路线。",
-    he: "加班班车", heQtd: n => n === 0 ? "暂无安排" : n + " 个安排",
+    roteiro: "路线类型", habitual: "常规路线", semHab: "您没有常规路线。",
+    he: "加班班车", heRot: "加班路线", heQtd: n => n === 0 ? "暂无安排" : n + " 个安排",
     heVazio: "您目前没有加班班车安排。", chegadaFab: "到达工厂", saidaFab: "离开工厂",
     msgs: "消息", msgsQtd: (n, novas) => novas ? novas + " 条新消息" : n ? "没有新消息" : "暂无消息",
     msgsVazio: "暂无消息。", nova: "新", deEquipe: "交通部门",
@@ -381,7 +380,7 @@ function telaMenu() {
   ${avisoMud()}
   <nav class="opcoes">
     ${opc("bhab", ICON.onibus, L.habitual, habSub, "", d.viagens.length ? "" : " apagada")}
-    ${opc("bhe", ICON.extra, L.he, L.heQtd(d.he.length), d.he.length || "", d.he.length ? " destaque" : "")}
+    ${opc("bhe", ICON.extra, L.heRot, L.heQtd(d.he.length), d.he.length || "", d.he.length ? " destaque" : "")}
   </nav>
   <div class="fim"><span>${L.matriculaN(esc(d.matricula))}</span><button id="bsair">${L.sair}</button></div></div>
   ${S.modal ? telaModal() : ""}`;
@@ -417,7 +416,7 @@ function cartaoHE(v, i) {
   const p = v.paradas[v.parada] || ["", "", "", ""];
   return `<section class="viagem">
     <div class="cab he"><div><div class="mini">${L.suaHora}</div><div class="hora">${esc(p[0])}</div></div>
-      <div><div class="mini" style="text-align:right">${L.he}</div><div class="turno">${esc(diaHE(v.data)) || "—"}</div></div></div>
+      <div><div class="mini" style="text-align:right">${L.roteiro}</div><div class="turno">${L.he}</div></div></div>
     <div class="ponto"><div class="mini">${L.seuPonto}</div><b>${esc(p[1])}</b><span>${esc([p[2], p[3]].filter(Boolean).join(" · "))}</span></div>
     <div class="fatos"><div><small>${L.rota}</small><b>${esc(v.rota)}</b></div><div><small>${L.chegadaFab}</small><b>${esc(v.chegada || "—")}</b></div><div><small>${L.saidaFab}</small><b>${esc(v.saida || "—")}</b></div></div>
     <div style="padding:12px;border-top:1px solid var(--line)"><button class="btn" data-perc="he:${i}">${ICON.percurso}${L.percurso}</button></div>
@@ -426,7 +425,7 @@ function cartaoHE(v, i) {
 function telaHE() {
   const d = S.dados;
   return `<div class="app">${cabVoltar("bmenu", L.inicio)}
-  <h1 class="titulo" style="font-size:26px;margin:0">${L.he}</h1>
+  <h1 class="titulo" style="font-size:26px;margin:0">${L.heRot}</h1>
   ${offline()}
   ${d.he.length ? d.he.map(cartaoHE).join("") + avisos() : `<div class="aviso info">${ICON.extra}<span>${L.heVazio}</span></div>`}
   </div>`;
@@ -445,10 +444,10 @@ function telaPercurso() {
   const v = ehHE ? d.he[i] : d.viagens[i];
   if (!v) { S.tela = "menu"; return telaMenu() }
   const k = v.rota.split(" ");
-  const sub = ehHE ? [diaHE(v.data), L.nParadas(v.paradas.length)].filter(Boolean).join(" · ")
+  const sub = ehHE ? L.nParadas(v.paradas.length)
     : esc(L.t(v.turno)) + (v.emp ? " · " + esc(v.emp) : "") + " · " + L.nParadas(v.paradas.length);
   return `<div class="app">
-  ${cabVoltar("bvoltar", ehHE ? L.he : L.habitual)}
+  ${cabVoltar("bvoltar", ehHE ? L.heRot : L.habitual)}
   <div class="rhead"><div class="plate"><small>${esc(k[0])}</small><b>${esc(k.slice(1).join(" ") || k[0])}</b></div>
     <div><h1>${ehHE ? L.he : esc(veicCap(L.veic(v.veic)))}</h1><p>${sub}</p></div></div>
   <p class="nota" style="font-size:14px">${L.previstos}</p>
