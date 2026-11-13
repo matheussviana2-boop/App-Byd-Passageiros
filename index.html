@@ -110,13 +110,32 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
 .paradas li.dest .d{background:#fff;border-color:#fff}
 .paradas li.dest small{color:#fff;opacity:.85}
 .nota{margin:0;font-size:13px;color:var(--muted)}
-/* enviado */
-.ok{display:flex;flex-direction:column;align-items:center;text-align:center}
-.ok .circ{margin-top:110px;width:84px;height:84px;border-radius:50%;background:var(--info-bg);color:var(--plate);display:flex;align-items:center;justify-content:center}
-.ok h1{margin:22px 0 0;font-family:var(--f-brand);font-style:italic;font-weight:800;font-size:28px}
-.ok p{margin:10px 0 0;font-size:17px;color:var(--muted);max-width:310px}
-.ok .msg{margin-top:24px;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;text-align:left;font-size:15px;white-space:pre-wrap}
-.ok .msg small{display:block;margin-top:6px;font-size:13px;color:var(--muted)}
+/* menu */
+.opcoes{display:flex;flex-direction:column;gap:12px}
+.opcao{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;cursor:pointer;color:var(--fg)}
+.opcao .oic{width:48px;height:48px;border-radius:12px;background:var(--info-bg);color:var(--plate);display:flex;align-items:center;justify-content:center;flex:none}
+.opcao .otx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.opcao .otx b{font-size:18px}
+.opcao .otx small{font-size:14px;color:var(--muted);line-height:1.35}
+.opcao .oseta{color:var(--muted);flex:none}
+.opcao.destaque{border-color:var(--brand);border-width:2px}
+.opcao.apagada{opacity:.7}
+.badge{min-width:26px;height:26px;padding:0 8px;border-radius:13px;background:#d32f2f;color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex:none}
+.viagem .cab.he{background:var(--navy)}
+.viagem .cab.he .turno{font-size:22px}
+/* mensagens */
+.lista-msgs{display:flex;flex-direction:column;gap:10px}
+.mmsg{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.mmsg small{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.mmsg p{margin:6px 0 0;font-size:16px;white-space:pre-wrap;overflow-wrap:anywhere}
+.mmsg.nova{border:2px solid var(--brand)}
+.tag{background:var(--brand);color:#fff;border-radius:6px;padding:1px 7px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+.fundo-modal{position:fixed;inset:0;background:rgba(20,22,45,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:20}
+.modal{background:var(--bg);border-radius:20px;width:100%;max-width:440px;max-height:85vh;display:flex;flex-direction:column;gap:14px;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.modal .mcab{display:flex;align-items:center;gap:12px}
+.modal .mcab .oic{width:44px;height:44px;border-radius:12px;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+.modal h2{margin:0;font-family:var(--f-brand);font-style:italic;font-weight:800;font-size:21px;line-height:1.15}
+.modal .mcorpo{overflow:auto;display:flex;flex-direction:column;gap:10px}
 #toast{position:fixed;left:50%;bottom:max(20px,env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 16px;border-radius:10px;font-size:15px;max-width:90vw;z-index:9}
 .carregando{opacity:.6;pointer-events:none}
 </style>
@@ -157,17 +176,18 @@ const TXT = {
     ola: n => "Olá, <b>" + esc(n) + "</b>", atual: q => "Atualizado " + q, offline: q => "Sem conexão agora. Mostrando a consulta de " + q + ".",
     suaHora: "Seu horário de apanha", turno: "Turno", seuPonto: "Ponto de apanha", rota: "Rota", veiculo: "Veículo", empresa: "Empresa",
     t: t => t, dica: "Esteja no ponto <b>5 minutos antes</b>.", cinto: "Utilize o cinto de segurança.",
-    obs: "Observação", percurso: "Percurso", sair: "Sair", matriculaN: m => "Matrícula " + m,
+    percurso: "Percurso", sair: "Sair", matriculaN: m => "Matrícula " + m, inicio: "Início",
     mudou: "Seu roteiro mudou", mudHora: (a, b) => "Horário de apanha: <s>" + esc(a) + "</s> → <b>" + esc(b) + "</b>",
     mudPonto: p => "Ponto de apanha: <b>" + esc(p) + "</b>", mudRota: (a, b) => "Rota: " + esc(a) + " → <b>" + esc(b) + "</b>", mudFica: "Este aviso fica por 3 dias.",
-    voltar: "Meu roteiro", nParadas: n => n + " paradas", previstos: "Horários previstos de cada parada.",
-    vcAqui: "Você embarca aqui", destino: "BYD Camaçari", destinoSub: "Destino final", semNomes: "Os nomes dos outros passageiros não aparecem.",
-    obsTit: "Enviar observação", obsSub: "Precisa ajustar algo no seu transporte? Conte para a gente aqui.",
-    msg: "Observação", cel: "Celular para retorno", celAjuda: "Obrigatório, com DDD. É por ele que a equipe vai responder.", enviar: "Enviar", enviando: "Enviando…",
-    obsVai: "Junto com a mensagem vão sua matrícula, nome, rota e ponto atual.",
-    escreva: "Escreva sua observação.", celErr: "Informe um celular com DDD.",
-    okTit: "Observação enviada", okTxt: c => "A equipe de transporte vai retornar no celular <b style=\"color:var(--fg)\">" + esc(c) + "</b>.",
-    okEm: q => "Enviada " + q, okFica: "Até a confirmação, continue usando o ponto e o horário atuais.", okVoltar: "Voltar ao meu roteiro",
+    nParadas: n => n + " paradas", previstos: "Horários previstos de cada parada.",
+    vcAqui: "Você embarca aqui", destino: "BYD Camaçari", destinoSub: "Destino final",
+    habitual: "Roteiro habitual", semHab: "Você não tem roteiro habitual.",
+    he: "Hora extra", heQtd: n => n === 0 ? "Nenhuma programada" : n === 1 ? "1 programada" : n + " programadas",
+    heVazio: "Você não tem hora extra programada no momento.", chegadaFab: "Chegada na fábrica", saidaFab: "Saída da fábrica",
+    msgs: "Mensagens", msgsQtd: (n, novas) => novas ? (novas === 1 ? "1 nova" : novas + " novas") : n ? "Nenhuma nova" : "Nenhuma mensagem",
+    msgsVazio: "Nenhuma mensagem por enquanto.", nova: "Nova", deEquipe: "Equipe de transporte",
+    modalTit: n => n > 1 ? "Você tem " + n + " mensagens novas" : "Você tem uma mensagem nova", entendi: "Entendi",
+    semana: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"], hojeDia: "Hoje", amanha: "Amanhã",
     hojeAs: h => "hoje às " + h, diaAs: (d, h) => d + " às " + h,
     veic: v => v
   },
@@ -181,17 +201,18 @@ const TXT = {
     suaHora: "您的上车时间", turno: "班次", seuPonto: "上车地点", rota: "路线", veiculo: "车辆", empresa: "公司",
     t: t => ({ "Turno 1": "1班", "Turno 2": "2班", "Turno 3": "3班", "ADM": "行政班" })[t] || t,
     dica: "请<b>提前 5 分钟</b>到达上车点。", cinto: "请系好安全带。",
-    obs: "留言", percurso: "路线站点", sair: "退出", matriculaN: m => "工号 " + m,
+    percurso: "路线站点", sair: "退出", matriculaN: m => "工号 " + m, inicio: "首页",
     mudou: "您的路线有变动", mudHora: (a, b) => "上车时间：<s>" + esc(a) + "</s> → <b>" + esc(b) + "</b>",
     mudPonto: p => "上车地点：<b>" + esc(p) + "</b>", mudRota: (a, b) => "路线：" + esc(a) + " → <b>" + esc(b) + "</b>", mudFica: "此提示保留 3 天。",
-    voltar: "我的路线", nParadas: n => n + " 个站点", previstos: "各站点的预计时间。",
-    vcAqui: "您在这里上车", destino: "比亚迪卡马萨里", destinoSub: "终点", semNomes: "不显示其他乘客的姓名。",
-    obsTit: "发送留言", obsSub: "班车有需要调整的地方吗？请在这里告诉我们。",
-    msg: "留言", cel: "回复用手机号", celAjuda: "必填，请包含区号。交通部门会通过此号码回复。", enviar: "发送", enviando: "正在发送…",
-    obsVai: "留言会附带您的工号、姓名、路线和当前上车地点。",
-    escreva: "请填写留言。", celErr: "请填写包含区号的手机号。",
-    okTit: "留言已发送", okTxt: c => "交通部门会通过手机 <b style=\"color:var(--fg)\">" + esc(c) + "</b> 回复您。",
-    okEm: q => "发送于 " + q, okFica: "在确认之前，请继续使用当前的上车地点和时间。", okVoltar: "返回我的路线",
+    nParadas: n => n + " 个站点", previstos: "各站点的预计时间。",
+    vcAqui: "您在这里上车", destino: "比亚迪卡马萨里", destinoSub: "终点",
+    habitual: "常规路线", semHab: "您没有常规路线。",
+    he: "加班班车", heQtd: n => n === 0 ? "暂无安排" : n + " 个安排",
+    heVazio: "您目前没有加班班车安排。", chegadaFab: "到达工厂", saidaFab: "离开工厂",
+    msgs: "消息", msgsQtd: (n, novas) => novas ? novas + " 条新消息" : n ? "没有新消息" : "暂无消息",
+    msgsVazio: "暂无消息。", nova: "新", deEquipe: "交通部门",
+    modalTit: n => "您有 " + n + " 条新消息", entendi: "知道了",
+    semana: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"], hojeDia: "今天", amanha: "明天",
     hojeAs: h => "今天 " + h, diaAs: (d, h) => d + " " + h,
     veic: v => String(v || "").replace(/^VAN/i, "面包车").replace(/^MICRO/i, "中巴").replace(/^[OÔ]NIBUS/i, "大巴").replace(/^T[AÁ]XI/i, "出租车").replace(/^CARRO/i, "轿车")
   }
@@ -200,6 +221,15 @@ let L = TXT[LANG];
 function trocarIdioma() { LANG = LANG === "zh" ? "pt" : "zh"; L = TXT[LANG]; store.set("lang", LANG); document.documentElement.lang = LANG === "zh" ? "zh-CN" : "pt-BR"; render() }
 document.documentElement.lang = LANG === "zh" ? "zh-CN" : "pt-BR";
 const quando = iso => { const d = new Date(iso); if (isNaN(d)) return ""; return hoje(d) === hoje() ? L.hojeAs(hhmm(d)) : L.diaAs(pad(d.getDate()) + "/" + pad(d.getMonth() + 1), hhmm(d)) };
+// "2026-11-15" → "Sáb, 15/11" (ou "Hoje" / "Amanhã")
+const diaHE = s => {
+  if (!s) return "";
+  const d = new Date(s + "T12:00:00"), am = new Date(); am.setDate(am.getDate() + 1);
+  const dm = pad(d.getDate()) + "/" + pad(d.getMonth() + 1);
+  if (s === hoje()) return L.hojeDia + " · " + dm;
+  if (s === hoje(am)) return L.amanha + " · " + dm;
+  return L.semana[d.getDay()] + ", " + dm;
+};
 const titulo = s => String(s || "").toLowerCase().replace(/(^|[\s\/(-])(\S)/g, (m, a, b) => a + b.toUpperCase());
 const veicCap = v => titulo(v);
 
@@ -228,12 +258,24 @@ async function chamar(params, ms = 45000) {
 }
 
 /* ---------- estado ---------- */
-let S = {
-  tela: "login", m: store.get("m", null), dados: store.get("dados", null), offline: false,
-  erro: "", carregando: false, v: 0, obs: { msg: "", cel: store.get("cel", ""), erro: "", enviando: false }, enviado: null
-};
-if (S.m && S.dados) S.tela = "inicio";
-if (!S.obs.cel && S.dados && S.dados.cel) S.obs.cel = S.dados.cel;
+let S = { tela: "login", m: store.get("m", null), dados: store.get("dados", null), offline: false, erro: "", carregando: false, perc: null, modal: false };
+const normalizar = d => { if (d) { d.viagens = d.viagens || []; d.he = d.he || []; d.msgs = d.msgs || [] } return d };
+normalizar(S.dados);
+if (S.m && S.dados) S.tela = "menu";
+
+/* mensagens: o "lida" fica guardado neste celular */
+const lidas = () => store.get("lidas:" + S.m, []);
+const naoLidas = () => (S.dados ? S.dados.msgs : []).filter(x => !lidas().includes(x.id));
+function abrirModalSeTiver() { if (naoLidas().length) S.modal = true }
+function marcarLidas() {
+  const novas = naoLidas().map(x => x.id);
+  S.modal = false;
+  if (novas.length) {
+    store.set("lidas:" + S.m, lidas().concat(novas).slice(-300));
+    chamar({ acao: "lida", m: S.m, r: novas.join(",") }).catch(() => { });
+  }
+  render();
+}
 
 // guarda o que o passageiro viu; se horário, ponto ou rota mudarem, mostra o aviso por 3 dias
 function conferirMudanca(d) {
@@ -255,15 +297,14 @@ const mudanca = () => { const x = store.get("mudanca", null); return x && Date.n
 async function entrar(m, manter) {
   S.erro = ""; S.carregando = true; render();
   try {
-    const d = await chamar({ acao: "login", m });
+    const d = normalizar(await chamar({ acao: "login", m }));
     if (!d.encontrado) { S.erro = L.naoAchou; S.carregando = false; return render() }
     store.del("visto"); store.del("mudanca");
-    S.m = d.matricula; S.dados = d; S.offline = false; S.v = 0;
-    if (d.cel && !store.get("cel", "")) S.obs.cel = d.cel;   // celular da planilha já vem preenchido (pode editar)
+    S.m = d.matricula; S.dados = d; S.offline = false;
     if (manter) { store.set("m", d.matricula); store.set("dados", d) } else { store.del("m"); store.del("dados") }
     store.set("manter", !!manter); store.set("logDia", hoje());
     conferirMudanca(d);
-    S.tela = "inicio";
+    S.tela = "menu"; abrirModalSeTiver();
   } catch (e) { S.erro = esc(e.message) }
   S.carregando = false; render();
 }
@@ -271,47 +312,41 @@ async function atualizar() {
   if (!S.m) return;
   try {
     const reg = store.get("logDia", "") !== hoje();
-    const d = await chamar({ acao: "ver", m: S.m, reg: reg ? "1" : "0" });
+    const d = normalizar(await chamar({ acao: "ver", m: S.m, reg: reg ? "1" : "0" }));
     if (reg) store.set("logDia", hoje());
     if (!d.encontrado) { sair(); S.erro = L.naoAchou; return render() }
     S.dados = d; S.offline = false;
-    if (d.cel && !S.obs.cel) S.obs.cel = d.cel;
     if (store.get("manter", true)) store.set("dados", d);
     conferirMudanca(d);
+    abrirModalSeTiver();
   } catch (e) { S.offline = !!S.dados }
-  if (S.tela === "inicio" || S.tela === "percurso") render();
+  if (S.tela !== "login") render();
 }
-function sair() { store.del("m"); store.del("dados"); store.del("visto"); store.del("mudanca"); S = Object.assign(S, { tela: "login", m: null, dados: null, erro: "" }); render() }
-async function enviarObs() {
-  const o = S.obs, msg = ($("#msg").value || "").trim(), cel = ($("#cel").value || "").trim();
-  o.msg = msg; o.cel = cel;
-  const dig = cel.replace(/\D/g, "");
-  if (msg.length < 3) { o.erro = L.escreva; return render() }
-  if (dig.length < 10 || dig.length > 13) { o.erro = L.celErr; return render() }
-  o.erro = ""; o.enviando = true; render();
-  try {
-    const d = await chamar({ acao: "obs", m: S.m, msg, cel });
-    store.set("cel", cel);
-    S.enviado = { msg, cel, em: d.quando || new Date().toISOString() };
-    o.msg = ""; S.tela = "enviado";
-  } catch (e) { o.erro = esc(e.message) }
-  o.enviando = false; render(); window.scrollTo(0, 0);
-}
+function sair() { store.del("m"); store.del("dados"); store.del("visto"); store.del("mudanca"); S = Object.assign(S, { tela: "login", m: null, dados: null, erro: "", modal: false }); render() }
+function ir(tela) { S.tela = tela; render(); window.scrollTo(0, 0) }
 
 /* ---------- telas ---------- */
 const ICON = {
   relogio: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
-  obs: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4V5z"/><path d="M8 9h8M8 12h5"/></svg>',
   percurso: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><path d="M6 7v10M11 5h8M11 12h8M11 19h8"/></svg>',
   voltar: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>',
+  seta: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>',
   alerta: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17h.01"/></svg>',
   erro: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>',
-  enviar: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>',
-  check: '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>'
+  onibus: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="15" rx="3"/><path d="M5 11h14M8 18v2M16 18v2"/><circle cx="8.5" cy="14.5" r=".8" fill="currentColor"/><circle cx="15.5" cy="14.5" r=".8" fill="currentColor"/></svg>',
+  extra: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M12 13v5M9.5 15.5h5"/></svg>',
+  sino: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>',
+  cinto: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="4.5" r="2"/><path d="M8 21v-7a4 4 0 0 1 8 0v7"/><path d="M7 9l10 11"/></svg>'
 };
 const topo = () => `<header class="top"><div class="brandrow"><img class="logo" alt="Consórcio UniLitoral" src="${LOGO}"><span class="sep"></span>
   <div><div class="marca">Meu Roteiro <i>BYD</i></div><div class="sub">${S.dados ? L.atual(quando(S.dados.atualizado)) : ""}</div></div></div>
   <button class="ib" id="blang" aria-label="${L.btnAria}">${L.btn}</button></header>`;
+const cabVoltar = (id, rot) => `<header class="top"><button class="voltar" id="${id}">${ICON.voltar}${rot}</button>
+  <button class="ib" id="blang" aria-label="${L.btnAria}">${L.btn}</button></header>`;
+const avisos = () => `<div class="aviso info">${ICON.relogio}<span>${L.dica}</span></div>
+  <div class="cinto" role="note"><span class="sel">${ICON.cinto}</span><strong>${L.cinto}</strong></div>`;
+const avisoMud = () => { const mud = mudanca(); return mud ? `<div class="aviso warn" role="status">${ICON.alerta}<div><b>${L.mudou}</b><ul>${mud.itens.map(x => `<li>${x[0] === "hora" ? L.mudHora(x[1], x[2]) : x[0] === "ponto" ? L.mudPonto(x[1]) : L.mudRota(x[1], x[2])}</li>`).join("")}</ul><small>${L.mudFica}</small></div></div>` : "" };
+const offline = () => S.offline ? `<div class="aviso warn">${ICON.alerta}<span>${L.offline(quando(S.dados.atualizado))}</span></div>` : "";
 
 function telaLogin() {
   return `<div class="app login">
@@ -326,6 +361,30 @@ function telaLogin() {
   <label class="chk" style="margin-top:16px"><input type="checkbox" id="manter" ${store.get("manter", true) ? "checked" : ""}>${L.manter}</label>
   <p class="rodape" style="margin-top:auto;padding-top:24px">${L.semMat}</p></div>`;
 }
+function telaMenu() {
+  const d = S.dados, nl = naoLidas().length;
+  const habSub = d.viagens.length ? d.viagens.map(v => esc(L.t(v.turno)) + " · " + esc(v.rota) + " · " + esc((v.paradas[v.parada] || [""])[0])).join("<br>") : L.semHab;
+  const opc = (id, icone, tit, sub, badge, extraCls) => `<button class="opcao${extraCls || ""}" id="${id}"><span class="oic">${icone}</span>
+    <span class="otx"><b>${tit}</b><small>${sub}</small></span>${badge ? `<span class="badge">${badge}</span>` : ""}<span class="oseta">${ICON.seta}</span></button>`;
+  return `<div class="app">${topo()}
+  ${offline()}
+  <p class="ola">${L.ola(d.nome)}</p>
+  ${avisoMud()}
+  <nav class="opcoes">
+    ${opc("bhab", ICON.onibus, L.habitual, habSub, "", d.viagens.length ? "" : " apagada")}
+    ${opc("bhe", ICON.extra, L.he, L.heQtd(d.he.length), d.he.length || "", d.he.length ? " destaque" : "")}
+    ${opc("bmsgs", ICON.sino, L.msgs, L.msgsQtd(d.msgs.length, nl), nl || "", "")}
+  </nav>
+  <div class="fim"><span>${L.matriculaN(esc(d.matricula))}</span><button id="bsair">${L.sair}</button></div></div>
+  ${S.modal ? telaModal() : ""}`;
+}
+function telaModal() {
+  const lista = naoLidas();
+  return `<div class="fundo-modal"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="mtit">
+    <div class="mcab"><span class="oic">${ICON.sino}</span><h2 id="mtit">${L.modalTit(lista.length)}</h2></div>
+    <div class="mcorpo">${lista.map(x => `<div class="mmsg"><small>${L.deEquipe} · ${quando(x.em)}</small><p>${esc(x.txt)}</p></div>`).join("")}</div>
+    <button class="btn pri" id="bentendi">${L.entendi}</button></div></div>`;
+}
 function cartaoViagem(v, i, varias) {
   const p = v.paradas[v.parada] || ["", "", "", ""];
   return `<section class="viagem">
@@ -333,72 +392,83 @@ function cartaoViagem(v, i, varias) {
       <div><div class="mini" style="text-align:right">${L.turno}</div><div class="turno">${esc(L.t(v.turno))}</div></div></div>
     <div class="ponto"><div class="mini">${L.seuPonto}</div><b>${esc(p[1])}</b><span>${esc([p[2], p[3]].filter(Boolean).join(" · "))}</span></div>
     <div class="fatos"><div><small>${L.rota}</small><b>${esc(v.rota)}</b></div><div><small>${L.veiculo}</small><b>${esc(veicCap(L.veic(v.veic)))}</b></div><div><small>${L.empresa}</small><b style="font-size:19px">${esc(v.emp || "—")}</b></div></div>
-    ${varias ? `<div style="padding:12px;border-top:1px solid var(--line)"><button class="btn" data-perc="${i}">${ICON.percurso}${L.percurso}</button></div>` : ""}
+    ${varias ? `<div style="padding:12px;border-top:1px solid var(--line)"><button class="btn" data-perc="hab:${i}">${ICON.percurso}${L.percurso}</button></div>` : ""}
   </section>`;
 }
-function telaInicio() {
-  const d = S.dados, mud = mudanca(), varias = d.viagens.length > 1;
-  return `<div class="app">${topo()}
-  ${S.offline ? `<div class="aviso warn">${ICON.alerta}<span>${L.offline(quando(d.atualizado))}</span></div>` : ""}
-  <p class="ola">${L.ola(d.nome)}</p>
-  ${mud ? `<div class="aviso warn" role="status">${ICON.alerta}<div><b>${L.mudou}</b><ul>${mud.itens.map(x => `<li>${x[0] === "hora" ? L.mudHora(x[1], x[2]) : x[0] === "ponto" ? L.mudPonto(x[1]) : L.mudRota(x[1], x[2])}</li>`).join("")}</ul><small>${L.mudFica}</small></div></div>` : ""}
-  ${d.viagens.map((v, i) => cartaoViagem(v, i, varias)).join("")}
-  <div class="aviso info">${ICON.relogio}<span>${L.dica}</span></div>
-  <div class="cinto" role="note"><span class="sel"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="4.5" r="2"/><path d="M8 21v-7a4 4 0 0 1 8 0v7"/><path d="M7 9l10 11"/></svg></span><strong>${L.cinto}</strong></div>
-  <div class="acoes"><button class="btn" id="bobs">${ICON.obs}<span style="color:var(--fg)">${L.obs}</span></button>
-    ${varias ? "" : `<button class="btn pri" data-perc="0">${ICON.percurso}${L.percurso}</button>`}</div>
-  <div class="fim"><span>${L.matriculaN(esc(d.matricula))}</span><button id="bsair">${L.sair}</button></div></div>`;
+function telaHabitual() {
+  const d = S.dados, varias = d.viagens.length > 1;
+  return `<div class="app">${cabVoltar("bmenu", L.inicio)}
+  <h1 class="titulo" style="font-size:26px;margin:0">${L.habitual}</h1>
+  ${offline()}${avisoMud()}
+  ${d.viagens.length ? d.viagens.map((v, i) => cartaoViagem(v, i, varias)).join("") : `<div class="aviso info">${ICON.erro}<span>${L.semHab}</span></div>`}
+  ${d.viagens.length ? avisos() : ""}
+  ${d.viagens.length === 1 ? `<button class="btn pri" data-perc="hab:0">${ICON.percurso}${L.percurso}</button>` : ""}
+  </div>`;
+}
+function cartaoHE(v, i) {
+  const p = v.paradas[v.parada] || ["", "", "", ""];
+  return `<section class="viagem">
+    <div class="cab he"><div><div class="mini">${L.suaHora}</div><div class="hora">${esc(p[0])}</div></div>
+      <div><div class="mini" style="text-align:right">${L.he}</div><div class="turno">${esc(diaHE(v.data)) || "—"}</div></div></div>
+    <div class="ponto"><div class="mini">${L.seuPonto}</div><b>${esc(p[1])}</b><span>${esc([p[2], p[3]].filter(Boolean).join(" · "))}</span></div>
+    <div class="fatos"><div><small>${L.rota}</small><b>${esc(v.rota)}</b></div><div><small>${L.chegadaFab}</small><b>${esc(v.chegada || "—")}</b></div><div><small>${L.saidaFab}</small><b>${esc(v.saida || "—")}</b></div></div>
+    <div style="padding:12px;border-top:1px solid var(--line)"><button class="btn" data-perc="he:${i}">${ICON.percurso}${L.percurso}</button></div>
+  </section>`;
+}
+function telaHE() {
+  const d = S.dados;
+  return `<div class="app">${cabVoltar("bmenu", L.inicio)}
+  <h1 class="titulo" style="font-size:26px;margin:0">${L.he}</h1>
+  ${offline()}
+  ${d.he.length ? d.he.map(cartaoHE).join("") + avisos() : `<div class="aviso info">${ICON.extra}<span>${L.heVazio}</span></div>`}
+  </div>`;
+}
+function telaMsgs() {
+  const d = S.dados, ja = lidas();
+  return `<div class="app">${cabVoltar("bmenu", L.inicio)}
+  <h1 class="titulo" style="font-size:26px;margin:0">${L.msgs}</h1>
+  ${d.msgs.length ? `<div class="lista-msgs">${d.msgs.map(x => `<article class="mmsg${ja.includes(x.id) ? "" : " nova"}">
+      <small>${ja.includes(x.id) ? "" : `<span class="tag">${L.nova}</span>`}${L.deEquipe} · ${quando(x.em)}</small><p>${esc(x.txt)}</p></article>`).join("")}</div>`
+    : `<div class="aviso info">${ICON.sino}<span>${L.msgsVazio}</span></div>`}
+  </div>`;
 }
 function telaPercurso() {
-  const v = S.dados.viagens[S.v] || S.dados.viagens[0], k = v.rota.split(" ");
+  const [tipo, i] = S.perc, d = S.dados, ehHE = tipo === "he";
+  const v = ehHE ? d.he[i] : d.viagens[i];
+  if (!v) { S.tela = "menu"; return telaMenu() }
+  const k = v.rota.split(" ");
+  const sub = ehHE ? [diaHE(v.data), L.nParadas(v.paradas.length)].filter(Boolean).join(" · ")
+    : esc(L.t(v.turno)) + (v.emp ? " · " + esc(v.emp) : "") + " · " + L.nParadas(v.paradas.length);
   return `<div class="app">
-  <header class="top"><button class="voltar" id="bvoltar">${ICON.voltar}${L.voltar}</button><span class="sub">${L.atual(quando(S.dados.atualizado))}</span></header>
-  <div class="rhead"><div class="plate"><small>${esc(k[0])}</small><b>${esc(k.slice(1).join(" "))}</b></div>
-    <div><h1>${esc(veicCap(L.veic(v.veic)))}</h1><p>${esc(L.t(v.turno))}${v.emp ? " · " + esc(v.emp) : ""} · ${L.nParadas(v.paradas.length)}</p></div></div>
+  ${cabVoltar("bvoltar", ehHE ? L.he : L.habitual)}
+  <div class="rhead"><div class="plate"><small>${esc(k[0])}</small><b>${esc(k.slice(1).join(" ") || k[0])}</b></div>
+    <div><h1>${ehHE ? L.he : esc(veicCap(L.veic(v.veic)))}</h1><p>${sub}</p></div></div>
   <p class="nota" style="font-size:14px">${L.previstos}</p>
   <ol class="paradas">
-    ${v.paradas.map((p, i) => `<li class="${i === v.parada ? "eu" : ""}"><span class="h">${esc(p[0])}</span><span class="d" aria-hidden="true"></span>
-      <span class="n">${i === v.parada ? `<b>${esc(p[1])}</b>` : esc(p[1])}<small>${i === v.parada ? L.vcAqui + " · " : ""}${esc(p[2])}</small></span></li>`).join("")}
-    <li class="dest"><span></span><span class="d" aria-hidden="true"></span><span class="n"><b>${L.destino}</b><small>${L.destinoSub}</small></span></li>
+    ${v.paradas.map((p, j) => `<li class="${j === v.parada ? "eu" : ""}"><span class="h">${esc(p[0])}</span><span class="d" aria-hidden="true"></span>
+      <span class="n">${j === v.parada ? `<b>${esc(p[1])}</b>` : esc(p[1])}<small>${j === v.parada ? L.vcAqui + " · " : ""}${esc(p[2])}</small></span></li>`).join("")}
+    <li class="dest"><span class="h">${ehHE ? esc(v.chegada || "") : ""}</span><span class="d" aria-hidden="true"></span><span class="n"><b>${L.destino}</b><small>${ehHE && v.chegada ? L.chegadaFab : L.destinoSub}</small></span></li>
   </ol></div>`;
 }
-function telaObs() {
-  const o = S.obs;
-  return `<div class="app">
-  <header class="top"><button class="voltar" id="bvoltar">${ICON.voltar}${L.voltar}</button><span class="sub">${L.matriculaN(esc(S.m))}</span></header>
-  <div><h1 class="titulo" style="font-size:26px;margin:0">${L.obsTit}</h1><p style="margin:6px 0 0;color:var(--muted);font-size:15px">${L.obsSub}</p></div>
-  ${o.erro ? `<div class="aviso bad" role="alert">${ICON.erro}<span>${o.erro}</span></div>` : ""}
-  <form class="cartao${o.enviando ? " carregando" : ""}" id="fobs">
-    <div class="campo"><label class="lbl" for="msg">${L.msg}</label><textarea id="msg" maxlength="1000" rows="6">${esc(o.msg)}</textarea></div>
-    <div class="campo"><label class="lbl" for="cel">${L.cel} <span style="color:#b3261e">*</span></label>
-      <input id="cel" type="tel" inputmode="tel" autocomplete="tel" placeholder="(71) 9 0000-0000" value="${esc(o.cel)}" aria-required="true">
-      <span class="ajuda">${L.celAjuda}</span></div>
-    <button class="btn pri" ${o.enviando ? "disabled" : ""}>${ICON.enviar}${o.enviando ? L.enviando : L.enviar}</button>
-  </form></div>`;
-}
-function telaEnviado() {
-  const e = S.enviado;
-  return `<div class="app ok">
-  <div class="circ">${ICON.check}</div><h1>${L.okTit}</h1><p>${L.okTxt(e.cel)}</p>
-  <div class="msg">${esc(e.msg)}<small>${L.okEm(quando(e.em))}</small></div>
-  <p style="font-size:14px">${L.okFica}</p>
-  <button class="btn pri" id="bvoltar" style="margin-top:auto">${L.okVoltar}</button></div>`;
-}
 function render() {
-  const a = $("#app");
-  const html = S.tela === "inicio" && S.dados ? telaInicio() : S.tela === "percurso" && S.dados ? telaPercurso()
-    : S.tela === "obs" ? telaObs() : S.tela === "enviado" && S.enviado ? telaEnviado() : telaLogin();
-  a.innerHTML = html;
+  const a = $("#app"), tem = !!S.dados;
+  const telas = { menu: telaMenu, habitual: telaHabitual, he: telaHE, msgs: telaMsgs, percurso: telaPercurso };
+  a.innerHTML = tem && telas[S.tela] ? telas[S.tela]() : telaLogin();
   const on = (s, ev, f) => { const el = $(s); if (el) el[ev] = f };
   on("#blang", "onclick", trocarIdioma);
   on("#flogin", "onsubmit", e => { e.preventDefault(); const m = $("#m").value.trim(); store.set("ultimaM", m); if (!m) { S.erro = L.digite; return render() } entrar(m, $("#manter").checked) });
   on("#bsair", "onclick", sair);
-  on("#bobs", "onclick", () => { S.tela = "obs"; S.obs.erro = ""; render(); window.scrollTo(0, 0) });
-  document.querySelectorAll("[data-perc]").forEach(b => b.onclick = () => { S.v = +b.dataset.perc; S.tela = "percurso"; render(); window.scrollTo(0, 0) });
-  on("#bvoltar", "onclick", () => { S.tela = "inicio"; render(); window.scrollTo(0, 0) });
-  on("#fobs", "onsubmit", e => { e.preventDefault(); enviarObs() });
+  on("#bhab", "onclick", () => ir("habitual"));
+  on("#bhe", "onclick", () => ir("he"));
+  on("#bmsgs", "onclick", () => { const nl = naoLidas().map(x => x.id); ir("msgs"); if (nl.length) { store.set("lidas:" + S.m, lidas().concat(nl).slice(-300)); chamar({ acao: "lida", m: S.m, r: nl.join(",") }).catch(() => { }) } });
+  on("#bmenu", "onclick", () => ir("menu"));
+  on("#bvoltar", "onclick", () => ir(S.perc && S.perc[0] === "he" ? "he" : "habitual"));
+  on("#bentendi", "onclick", marcarLidas);
+  document.querySelectorAll("[data-perc]").forEach(b => b.onclick = () => { const [t, i] = b.dataset.perc.split(":"); S.perc = [t, +i]; ir("percurso") });
+  if (S.modal) { const b = $("#bentendi"); if (b) b.focus() }
 }
 
+if (S.tela === "menu") abrirModalSeTiver();
 render();
 if (S.m) atualizar();
 setInterval(() => { if (document.visibilityState === "visible") atualizar() }, ATUALIZAR_MIN * 60000);
