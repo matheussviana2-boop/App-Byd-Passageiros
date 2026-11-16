@@ -1,7 +1,7 @@
 /* Meu Roteiro BYD (passageiro) · service worker
    - a página (index.html) vem sempre da internet quando houver sinal; sem sinal, usa a última versão salva;
    - os dados do passageiro e as observações NÃO passam por aqui (vão direto ao Apps Script). */
-const VERSAO = "mrbyd-v3";
+const VERSAO = "mrbyd-v4";
 const ARQUIVOS = ["./", "index.html", "manifest.webmanifest", "icon-192.png?v=2", "icon-512.png?v=2"];
 
 self.addEventListener("install", e => {

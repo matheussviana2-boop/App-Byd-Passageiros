@@ -116,6 +116,18 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
 .sinob .pt{position:absolute;top:-7px;right:-7px;min-width:20px;height:20px;padding:0 5px;border-radius:10px;background:#d32f2f;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg)}
 @keyframes balanca{0%,80%,100%{transform:rotate(0)}85%{transform:rotate(-12deg)}90%{transform:rotate(12deg)}95%{transform:rotate(-6deg)}}
 @media (prefers-reduced-motion:reduce){.sinob.tem{animation:none}}
+.ajudab{margin-top:16px;background:transparent;border:1.5px dashed var(--brand);color:var(--plate);font-size:15px}
+.nomes{display:flex;flex-direction:column;gap:8px}
+.nomeb{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer;color:var(--fg)}
+.nomeb b{display:block;font-size:17px}
+.nomeb small{display:block;font-size:14px;color:var(--muted);margin-top:2px}
+.nomeb svg{color:var(--muted);flex:none}
+.ajudac{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;margin-top:24px}
+.ajudac .circ{width:84px;height:84px;border-radius:50%;background:var(--info-bg);color:var(--plate);display:flex;align-items:center;justify-content:center}
+.ajudac p{margin:0;font-size:17px;color:var(--muted);max-width:330px}
+.telbox{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:2px}
+.telbox small{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.telbox b{font-family:var(--f-num);font-size:34px;font-weight:800;color:var(--fg)}
 /* menu */
 .opcoes{display:flex;flex-direction:column;gap:12px}
 .opcao{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;cursor:pointer;color:var(--fg)}
@@ -174,8 +186,14 @@ let LANG = store.get("lang", "pt") === "zh" ? "zh" : "pt";
 const TXT = {
   pt: {
     btn: "中文", btnAria: "Mudar o idioma para mandarim", sub: "Seu transporte BYD na palma da mão.",
-    matricula: "Matrícula", exMat: "Ex.: 12759", manter: "Manter conectado neste celular", entrar: "Entrar", entrando: "Entrando…",
-    semMat: "Não sabe sua matrícula? Ela está no seu crachá BYD.",
+    matricula: "Matrícula ou nome", exMat: "Ex.: 12759 ou Fabio Santos", manter: "Manter conectado neste celular", entrar: "Entrar", entrando: "Entrando…",
+    semMat: "Não sabe sua matrícula? Digite seu nome.",
+    buscando: "Buscando…", escolha: "Quem é você?", escolhaSub: n => n === 1 ? "Encontramos 1 pessoa. Toque no seu nome." : "Encontramos " + n + " pessoas. Toque no seu nome.",
+    muitos: (v, n) => "Mostrando " + v + " de " + n + ". Digite também o sobrenome para achar mais rápido.",
+    nenhumNome: "<b>Nenhum nome encontrado.</b> Confira como escreveu ou entre com sua matrícula.", voltarBusca: "Voltar",
+    ajudaBtn: "Não conseguiu acessar? Clique aqui", ajudaTit: "Precisa de ajuda?",
+    ajudaTxt: "Problemas para acessar o app, roteiro errado ou qualquer dúvida sobre o seu transporte? Fale com a equipe de transporte.",
+    ajudaTel: "Telefone para contato", ligar: "Ligar", whats: "WhatsApp",
     naoAchou: "<b>Matrícula não encontrada.</b> Confira o número. Se estiver certo, você ainda não está em nenhuma rota. Procure o setor de transporte da BYD.",
     digite: "Digite sua matrícula.", semRede: "Sem conexão. Verifique a internet e tente de novo.",
     ola: n => "Olá, <b>" + esc(n) + "</b>", atual: q => "Atualizado " + q, offline: q => "Sem conexão agora. Mostrando a consulta de " + q + ".",
@@ -198,8 +216,14 @@ const TXT = {
   },
   zh: {
     btn: "PT", btnAria: "Mudar o idioma para português", sub: "比亚迪班车，尽在掌握。",
-    matricula: "工号", exMat: "例如：12759", manter: "在此手机上保持登录", entrar: "登录", entrando: "正在登录…",
-    semMat: "不知道您的工号？请查看您的比亚迪工牌。",
+    matricula: "工号或姓名", exMat: "例如：12759 或 Fabio Santos", manter: "在此手机上保持登录", entrar: "登录", entrando: "正在登录…",
+    semMat: "不知道工号？请输入您的姓名。",
+    buscando: "正在搜索…", escolha: "请选择您的姓名", escolhaSub: n => "找到 " + n + " 人，请点击您的姓名。",
+    muitos: (v, n) => "显示 " + v + " / " + n + " 人。请同时输入姓氏以便更快找到。",
+    nenhumNome: "<b>未找到该姓名。</b> 请核对拼写或使用工号登录。", voltarBusca: "返回",
+    ajudaBtn: "无法登录？点击这里", ajudaTit: "需要帮助？",
+    ajudaTxt: "无法登录、路线有误或对班车有任何疑问？请联系交通部门。",
+    ajudaTel: "联系电话", ligar: "拨打电话", whats: "WhatsApp",
     naoAchou: "<b>未找到该工号。</b> 请核对号码。如果号码正确，说明您还没有被安排到任何路线，请联系比亚迪交通部门。",
     digite: "请输入您的工号。", semRede: "没有网络连接，请检查网络后重试。",
     ola: n => "您好，<b>" + esc(n) + "</b>", atual: q => "更新于 " + q, offline: q => "目前没有网络，显示的是 " + q + " 的查询结果。",
@@ -299,18 +323,27 @@ function conferirMudanca(d) {
 }
 const mudanca = () => { const x = store.get("mudanca", null); return x && Date.now() - x.em < 3 * 864e5 ? x : null };
 
-async function entrar(m, manter) {
+async function buscarNome(q) {
   S.erro = ""; S.carregando = true; render();
   try {
-    const d = normalizar(await chamar({ acao: "login", m }));
-    if (!d.encontrado) { S.erro = L.naoAchou; S.carregando = false; return render() }
+    const r = await chamar({ acao: "buscar", q });
+    if (!r.lista.length) S.erro = L.nenhumNome;
+    else { S.busca = r; S.tela = "escolha" }
+  } catch (e) { S.erro = esc(e.message) }
+  S.carregando = false; render(); window.scrollTo(0, 0);
+}
+async function entrar(m, manter, t) {
+  S.erro = ""; S.carregando = true; render();
+  try {
+    const d = normalizar(await chamar(t ? { acao: "login", t } : { acao: "login", m }));
+    if (!d.encontrado) { S.erro = L.naoAchou; S.tela = "login"; S.carregando = false; return render() }
     store.del("visto"); store.del("mudanca");
     S.m = d.matricula; S.dados = d; S.offline = false;
     if (manter) { store.set("m", d.matricula); store.set("dados", d) } else { store.del("m"); store.del("dados") }
     store.set("manter", !!manter); store.set("logDia", hoje());
     conferirMudanca(d);
     S.tela = "menu"; abrirModalSeTiver();
-  } catch (e) { S.erro = esc(e.message) }
+  } catch (e) { S.erro = esc(e.message); if (t) S.tela = "login" }
   S.carregando = false; render();
 }
 async function atualizar() {
@@ -340,6 +373,9 @@ const ICON = {
   erro: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>',
   onibus: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="15" rx="3"/><path d="M5 11h14M8 18v2M16 18v2"/><circle cx="8.5" cy="14.5" r=".8" fill="currentColor"/><circle cx="15.5" cy="14.5" r=".8" fill="currentColor"/></svg>',
   extra: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M12 13v5M9.5 15.5h5"/></svg>',
+  fone: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>',
+  foneG: '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>',
+  whats: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21l1.7-5A8.5 8.5 0 1 1 8 19.4L3 21z"/><path d="M9 10c.5 2 2 3.5 4 4l1.2-1.2 2 .8v1.6c-4 .5-8.5-4-8-8h1.6l.8 2L9.4 10"/></svg>',
   sinoP: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>',
   sino: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>',
   cinto: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="4.5" r="2"/><path d="M8 21v-7a4 4 0 0 1 8 0v7"/><path d="M7 9l10 11"/></svg>'
@@ -363,11 +399,35 @@ function telaLogin() {
   ${S.erro ? `<div class="aviso bad" role="alert" style="margin-top:28px">${ICON.erro}<span>${S.erro}</span></div>` : ""}
   <form class="cartao${S.carregando ? " carregando" : ""}" id="flogin" style="margin-top:${S.erro ? 14 : 36}px">
     <div class="campo"><label class="lbl" for="m">${L.matricula}</label>
-      <input id="m" inputmode="numeric" autocomplete="off" placeholder="${L.exMat}" value="${esc(store.get("ultimaM", ""))}" class="${S.erro ? "erro" : ""}"></div>
+      <input id="m" autocomplete="off" autocapitalize="words" spellcheck="false" placeholder="${L.exMat}" value="${esc(store.get("ultimaM", ""))}" class="${S.erro ? "erro" : ""}">
+      <span class="ajuda">${L.semMat}</span></div>
     <button class="btn pri" ${S.carregando ? "disabled" : ""}>${S.carregando ? L.entrando : L.entrar}</button>
   </form>
   <label class="chk" style="margin-top:16px"><input type="checkbox" id="manter" ${store.get("manter", true) ? "checked" : ""}>${L.manter}</label>
-  <p class="rodape" style="margin-top:auto;padding-top:24px">${L.semMat}</p></div>`;
+  <button class="btn ajudab" id="bajuda" style="margin-top:auto">${ICON.fone}${L.ajudaBtn}</button></div>`;
+}
+function telaEscolha() {
+  const b = S.busca;
+  return `<div class="app">
+  <header class="top"><button class="voltar" id="bvbusca">${ICON.voltar}${L.voltarBusca}</button>
+    <button class="ib" id="blang" aria-label="${L.btnAria}">${L.btn}</button></header>
+  <div><h1 class="titulo" style="font-size:26px;margin:0">${L.escolha}</h1><p style="margin:6px 0 0;color:var(--muted);font-size:15px">${L.escolhaSub(b.total)}</p></div>
+  ${b.total > b.lista.length ? `<div class="aviso warn">${ICON.alerta}<span>${L.muitos(b.lista.length, b.total)}</span></div>` : ""}
+  <div class="nomes${S.carregando ? " carregando" : ""}">${b.lista.map(x => `<button class="nomeb" data-t="${esc(x.t)}"><span><b>${esc(x.nome)}</b><small>${esc(L.t(x.info.split(" · ")[0]) + (x.info.includes(" · ") ? " · " + x.info.split(" · ").slice(1).join(" · ") : ""))}</small></span>${ICON.seta}</button>`).join("")}</div>
+  <button class="btn ajudab" id="bajuda">${ICON.fone}${L.ajudaBtn}</button></div>`;
+}
+function telaAjuda() {
+  return `<div class="app">
+  <header class="top"><button class="voltar" id="bvajuda">${ICON.voltar}${L.voltarBusca}</button>
+    <button class="ib" id="blang" aria-label="${L.btnAria}">${L.btn}</button></header>
+  <div class="ajudac">
+    <div class="circ">${ICON.foneG}</div>
+    <h1 class="titulo" style="font-size:26px;margin:0">${L.ajudaTit}</h1>
+    <p>${L.ajudaTxt}</p>
+    <div class="telbox"><small>${L.ajudaTel}</small><b>(71) 98202-1549</b></div>
+    <a class="btn pri" href="tel:+5571982021549">${ICON.fone}${L.ligar}</a>
+    <a class="btn" href="https://wa.me/5571982021549" target="_blank" rel="noopener">${ICON.whats}${L.whats}</a>
+  </div></div>`;
 }
 function telaMenu() {
   const d = S.dados, nl = naoLidas().length;
@@ -460,10 +520,18 @@ function telaPercurso() {
 function render() {
   const a = $("#app"), tem = !!S.dados;
   const telas = { menu: telaMenu, habitual: telaHabitual, he: telaHE, msgs: telaMsgs, percurso: telaPercurso };
-  a.innerHTML = tem && telas[S.tela] ? telas[S.tela]() : telaLogin();
+  a.innerHTML = S.tela === "ajuda" ? telaAjuda() : S.tela === "escolha" && S.busca ? telaEscolha() : tem && telas[S.tela] ? telas[S.tela]() : telaLogin();
   const on = (s, ev, f) => { const el = $(s); if (el) el[ev] = f };
   on("#blang", "onclick", trocarIdioma);
-  on("#flogin", "onsubmit", e => { e.preventDefault(); const m = $("#m").value.trim(); store.set("ultimaM", m); if (!m) { S.erro = L.digite; return render() } entrar(m, $("#manter").checked) });
+  on("#flogin", "onsubmit", e => {
+    e.preventDefault(); const m = $("#m").value.trim(); S.manter = $("#manter").checked; store.set("ultimaM", m);
+    if (!m) { S.erro = L.digite; return render() }
+    /[A-Za-zÀ-ÿ]/.test(m) ? buscarNome(m) : entrar(m, S.manter);
+  });
+  on("#bajuda", "onclick", () => { S.voltarDe = S.tela; ir("ajuda") });
+  on("#bvajuda", "onclick", () => ir(S.voltarDe === "escolha" && S.busca ? "escolha" : "login"));
+  on("#bvbusca", "onclick", () => ir("login"));
+  document.querySelectorAll("[data-t]").forEach(b => b.onclick = () => entrar("", S.manter !== false, b.dataset.t));
   on("#bsair", "onclick", sair);
   on("#bhab", "onclick", () => ir("habitual"));
   on("#bhe", "onclick", () => ir("he"));
