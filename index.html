@@ -421,7 +421,6 @@ function telaLogin() {
       <div class="pesq"><input id="m" type="search" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="search" placeholder="${L.exMat}" value="${esc(S.mtxt ?? store.get("ultimaM", ""))}" class="${S.erro ? "erro" : ""}">
         <button type="button" class="lupab" id="blupa" aria-label="${L.lupaAria}">${ICON.lupa}</button></div></div>
     ${S.busca ? `<div class="res"><p>${L.escolhaSub(S.busca.total)}</p>
-      ${S.busca.total > S.busca.lista.length ? `<div class="aviso warn">${ICON.alerta}<span>${L.muitos(S.busca.lista.length, S.busca.total)}</span></div>` : ""}
       <div class="nomes" role="radiogroup">${S.busca.lista.map(x => `<button type="button" role="radio" aria-checked="${S.sel === x.t}" class="nomeb${S.sel === x.t ? " sel" : ""}" data-t="${esc(x.t)}"><span class="rd"></span><span><b>${esc(x.nome)}</b><small>${esc(L.t(x.info.split(" · ")[0]) + (x.info.includes(" · ") ? " · " + x.info.split(" · ").slice(1).join(" · ") : ""))}</small></span></button>`).join("")}</div></div>` : ""}
     <button class="btn pri" ${S.carregando ? "disabled" : ""}>${S.carregando ? (S.buscando ? L.buscando : L.entrando) : L.entrar}</button>
   </form>
@@ -587,6 +586,7 @@ function render() {
 if (S.tela === "menu") abrirModalSeTiver();
 render();
 if (S.m) atualizar();
+else chamar({ acao: "ping" }, 20000).catch(() => { });   // "acorda" o script enquanto a pessoa digita: a primeira busca sai mais rápida
 setInterval(() => { if (document.visibilityState === "visible") atualizar() }, ATUALIZAR_MIN * 60000);
 document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && S.m) atualizar() });
 if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => { });
