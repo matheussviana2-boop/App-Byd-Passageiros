@@ -128,6 +128,20 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
 .telbox{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:2px}
 .telbox small{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .telbox b{font-family:var(--f-num);font-size:34px;font-weight:800;color:var(--fg)}
+.assina{margin-top:auto;padding-top:28px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.assina small{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.assina img{height:38px;width:auto}
+.pesq{position:relative}
+.pesq input{width:100%;padding-right:58px}
+.pesq input::-webkit-search-cancel-button{display:none}
+.lupab{position:absolute;right:6px;top:6px;width:44px;height:40px;border:0;border-radius:9px;background:var(--info-bg);color:var(--plate);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.res{display:flex;flex-direction:column;gap:10px}
+.res>p{margin:0;font-size:14px;color:var(--muted)}
+.res .nomes{max-height:340px;overflow:auto}
+.nomeb{justify-content:flex-start}
+.nomeb .rd{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);flex:none}
+.nomeb.sel{border:2px solid var(--brand);background:var(--info-bg)}
+.nomeb.sel .rd{border:7px solid var(--brand)}
 /* menu */
 .opcoes{display:flex;flex-direction:column;gap:12px}
 .opcao{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;cursor:pointer;color:var(--fg)}
@@ -186,15 +200,16 @@ let LANG = store.get("lang", "pt") === "zh" ? "zh" : "pt";
 const TXT = {
   pt: {
     btn: "中文", btnAria: "Mudar o idioma para mandarim", sub: "Seu transporte BYD na palma da mão.",
-    matricula: "Matrícula", exMat: "Ex.: 12759", manter: "Manter conectado neste celular", entrar: "Entrar", entrando: "Entrando…",
+    matricula: "Matrícula ou nome", exMat: "Ex.: 12759 ou Fabio Santos", manter: "Manter conectado neste celular", entrar: "Entrar", entrando: "Entrando…",
     semMat: "Entrar pelo nome", buscaTit: "Pesquisar pelo nome", buscaSub: "Digite seu nome e sobrenome e toque em Pesquisar.",
     nomeLbl: "Seu nome", buscaPh: "Ex.: Fabio Santos", pesquisar: "Pesquisar",
-    buscando: "Buscando…", escolha: "Quem é você?", escolhaSub: n => n === 1 ? "Encontramos 1 pessoa. Toque no seu nome." : "Encontramos " + n + " pessoas. Toque no seu nome.",
+    buscando: "Buscando…", escolha: "Quem é você?", escolhaSub: n => n === 1 ? "Encontramos 1 pessoa. Selecione seu nome e toque em Entrar." : "Encontramos " + n + " pessoas. Selecione seu nome e toque em Entrar.",
+    selecione: "Selecione seu nome na lista.", lupaAria: "Pesquisar nome",
     muitos: (v, n) => "Mostrando " + v + " de " + n + ". Digite também o sobrenome para achar mais rápido.",
     nenhumNome: "<b>Nenhum nome encontrado.</b> Confira como escreveu ou entre com sua matrícula.", voltarBusca: "Voltar",
     ajudaBtn: "Não conseguiu acessar? Clique aqui", ajudaTit: "Precisa de ajuda?",
     ajudaTxt: "Problemas para acessar o app, roteiro errado ou qualquer dúvida sobre o seu transporte? Fale com a equipe de transporte.",
-    ajudaTel: "Telefone para contato", ligar: "Ligar", whats: "WhatsApp",
+    ajudaTel: "Telefone para contato", atendimento: "Atendimento", ligar: "Ligar", whats: "WhatsApp",
     naoAchou: "<b>Matrícula não encontrada.</b> Confira o número. Se estiver certo, você ainda não está em nenhuma rota. Procure o setor de transporte da BYD.",
     digite: "Digite sua matrícula.", digiteNome: "Digite seu nome.", semRede: "Sem conexão. Verifique a internet e tente de novo.",
     ola: n => "Olá, <b>" + esc(n) + "</b>", atual: q => "Atualizado " + q, offline: q => "Sem conexão agora. Mostrando a consulta de " + q + ".",
@@ -217,15 +232,16 @@ const TXT = {
   },
   zh: {
     btn: "PT", btnAria: "Mudar o idioma para português", sub: "比亚迪班车，尽在掌握。",
-    matricula: "工号", exMat: "例如：12759", manter: "在此手机上保持登录", entrar: "登录", entrando: "正在登录…",
+    matricula: "工号或姓名", exMat: "例如：12759 或 Fabio Santos", manter: "在此手机上保持登录", entrar: "登录", entrando: "正在登录…",
     semMat: "按姓名登录", buscaTit: "按姓名搜索", buscaSub: "请输入您的名字和姓氏，然后点击搜索。",
     nomeLbl: "您的姓名", buscaPh: "例如：Fabio Santos", pesquisar: "搜索",
-    buscando: "正在搜索…", escolha: "请选择您的姓名", escolhaSub: n => "找到 " + n + " 人，请点击您的姓名。",
+    buscando: "正在搜索…", escolha: "请选择您的姓名", escolhaSub: n => "找到 " + n + " 人，请选择您的姓名后点击登录。",
+    selecione: "请在列表中选择您的姓名。", lupaAria: "搜索姓名",
     muitos: (v, n) => "显示 " + v + " / " + n + " 人。请同时输入姓氏以便更快找到。",
     nenhumNome: "<b>未找到该姓名。</b> 请核对拼写或使用工号登录。", voltarBusca: "返回",
     ajudaBtn: "无法登录？点击这里", ajudaTit: "需要帮助？",
     ajudaTxt: "无法登录、路线有误或对班车有任何疑问？请联系交通部门。",
-    ajudaTel: "联系电话", ligar: "拨打电话", whats: "WhatsApp",
+    ajudaTel: "联系电话", atendimento: "服务单位", ligar: "拨打电话", whats: "WhatsApp",
     naoAchou: "<b>未找到该工号。</b> 请核对号码。如果号码正确，说明您还没有被安排到任何路线，请联系比亚迪交通部门。",
     digite: "请输入您的工号。", digiteNome: "请输入您的姓名。", semRede: "没有网络连接，请检查网络后重试。",
     ola: n => "您好，<b>" + esc(n) + "</b>", atual: q => "更新于 " + q, offline: q => "目前没有网络，显示的是 " + q + " 的查询结果。",
@@ -326,7 +342,7 @@ function conferirMudanca(d) {
 const mudanca = () => { const x = store.get("mudanca", null); return x && Date.now() - x.em < 3 * 864e5 ? x : null };
 
 async function buscarNome(q) {
-  S.erro = ""; S.carregando = true; render();
+  S.erro = ""; S.sel = null; S.carregando = true; render();
   try {
     const r = await chamar({ acao: "buscar", q });
     S.busca = r.lista.length ? r : null;
@@ -344,8 +360,8 @@ async function entrar(m, manter, t) {
     if (manter) { store.set("m", d.matricula); store.set("dados", d) } else { store.del("m"); store.del("dados") }
     store.set("manter", !!manter); store.set("logDia", hoje());
     conferirMudanca(d);
-    S.tela = "menu"; abrirModalSeTiver();
-  } catch (e) { S.erro = esc(e.message); if (t) S.tela = "login" }
+    S.tela = "menu"; S.busca = null; S.sel = null; S.mtxt = null; abrirModalSeTiver();
+  } catch (e) { S.erro = esc(e.message); if (t) { S.tela = "login"; S.busca = null; S.sel = null } }
   S.carregando = false; render();
 }
 async function atualizar() {
@@ -402,12 +418,16 @@ function telaLogin() {
   ${S.erro ? `<div class="aviso bad" role="alert" style="margin-top:28px">${ICON.erro}<span>${S.erro}</span></div>` : ""}
   <form class="cartao${S.carregando ? " carregando" : ""}" id="flogin" style="margin-top:${S.erro ? 14 : 36}px">
     <div class="campo"><label class="lbl" for="m">${L.matricula}</label>
-      <input id="m" inputmode="numeric" autocomplete="off" placeholder="${L.exMat}" value="${esc(store.get("ultimaM", ""))}" class="${S.erro ? "erro" : ""}"></div>
-    <button class="btn pri" ${S.carregando ? "disabled" : ""}>${S.carregando ? L.entrando : L.entrar}</button>
+      <div class="pesq"><input id="m" type="search" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="search" placeholder="${L.exMat}" value="${esc(S.mtxt ?? store.get("ultimaM", ""))}" class="${S.erro ? "erro" : ""}">
+        <button type="button" class="lupab" id="blupa" aria-label="${L.lupaAria}">${ICON.lupa}</button></div></div>
+    ${S.busca ? `<div class="res"><p>${L.escolhaSub(S.busca.total)}</p>
+      ${S.busca.total > S.busca.lista.length ? `<div class="aviso warn">${ICON.alerta}<span>${L.muitos(S.busca.lista.length, S.busca.total)}</span></div>` : ""}
+      <div class="nomes" role="radiogroup">${S.busca.lista.map(x => `<button type="button" role="radio" aria-checked="${S.sel === x.t}" class="nomeb${S.sel === x.t ? " sel" : ""}" data-t="${esc(x.t)}"><span class="rd"></span><span><b>${esc(x.nome)}</b><small>${esc(L.t(x.info.split(" · ")[0]) + (x.info.includes(" · ") ? " · " + x.info.split(" · ").slice(1).join(" · ") : ""))}</small></span></button>`).join("")}</div></div>` : ""}
+    <button class="btn pri" ${S.carregando ? "disabled" : ""}>${S.carregando ? (S.buscando ? L.buscando : L.entrando) : L.entrar}</button>
   </form>
   <label class="chk" style="margin-top:16px"><input type="checkbox" id="manter" ${store.get("manter", true) ? "checked" : ""}>${L.manter}</label>
-  <button class="btn" id="bpornome" style="margin-top:20px">${ICON.lupa}${L.semMat}</button>
-  <button class="btn ajudab" id="bajuda" style="margin-top:auto">${ICON.fone}${L.ajudaBtn}</button></div>`;
+  <div style="flex:1;min-height:24px"></div>
+  <button class="btn ajudab" id="bajuda" style="margin-top:0">${ICON.fone}${L.ajudaBtn}</button></div>`;
 }
 function telaEscolha() {
   const b = S.busca;
@@ -437,7 +457,8 @@ function telaAjuda() {
     <div class="telbox"><small>${L.ajudaTel}</small><b>(71) 98202-1549</b></div>
     <a class="btn pri" href="tel:+5571982021549">${ICON.fone}${L.ligar}</a>
     <a class="btn" href="https://wa.me/5571982021549" target="_blank" rel="noopener">${ICON.whats}${L.whats}</a>
-  </div></div>`;
+  </div>
+  <div class="assina"><small>${L.atendimento}</small><img src="${LOGO}" alt="Consórcio UniLitoral"></div></div>`;
 }
 function telaMenu() {
   const d = S.dados, nl = naoLidas().length;
@@ -533,18 +554,25 @@ function render() {
   a.innerHTML = S.tela === "ajuda" ? telaAjuda() : S.tela === "escolha" ? telaEscolha() : tem && telas[S.tela] ? telas[S.tela]() : telaLogin();
   const on = (s, ev, f) => { const el = $(s); if (el) el[ev] = f };
   on("#blang", "onclick", trocarIdioma);
+  // campo único: matrícula (números) ou nome (letras). A lupa pesquisa o nome; Entrar entra com o nome selecionado ou com a matrícula.
+  const pesquisar = () => {
+    const m = $("#m").value.trim(); S.mtxt = m; S.manter = $("#manter").checked;
+    if (m.replace(/[^A-Za-zÀ-ÿ]/g, "").length < 3) { S.busca = null; S.erro = /[A-Za-zÀ-ÿ]/.test(m) || !m ? L.digiteNome : L.digite; return render() }
+    S.buscando = true; buscarNome(m).then(() => { S.buscando = false; render() });
+  };
+  on("#blupa", "onclick", pesquisar);
+  on("#m", "oninput", () => { if (S.sel) { S.sel = null; document.querySelectorAll(".nomeb.sel").forEach(b => { b.classList.remove("sel"); b.setAttribute("aria-checked", "false") }) } });
   on("#flogin", "onsubmit", e => {
-    e.preventDefault(); const m = $("#m").value.trim(); S.manter = $("#manter").checked; store.set("ultimaM", m);
+    e.preventDefault(); const m = $("#m").value.trim(); S.mtxt = m; S.manter = $("#manter").checked; store.set("ultimaM", m);
+    if (S.sel) return entrar("", S.manter, S.sel);
     if (!m) { S.erro = L.digite; return render() }
-    if (/[A-Za-zÀ-ÿ]/.test(m)) { S.q = m; S.busca = null; S.erro = ""; ir("escolha"); return buscarNome(m) }   // digitou nome no campo da matrícula
+    if (/[A-Za-zÀ-ÿ]/.test(m)) { if (S.busca) { S.erro = L.selecione; return render() } return pesquisar() }
     entrar(m, S.manter);
   });
-  on("#bpornome", "onclick", () => { S.manter = $("#manter").checked; S.erro = ""; ir("escolha"); const q = $("#q"); if (q) q.focus() });
-  on("#fbusca", "onsubmit", e => { e.preventDefault(); S.q = $("#q").value.trim(); if (!S.q) { S.erro = L.digiteNome; return render() } buscarNome(S.q) });
   on("#bajuda", "onclick", () => { S.voltarDe = S.tela; ir("ajuda") });
-  on("#bvajuda", "onclick", () => ir(S.voltarDe === "escolha" ? "escolha" : "login"));
+  on("#bvajuda", "onclick", () => ir("login"));
   on("#bvbusca", "onclick", () => { S.erro = ""; ir("login") });
-  document.querySelectorAll("[data-t]").forEach(b => b.onclick = () => entrar("", S.manter !== false, b.dataset.t));
+  document.querySelectorAll("[data-t]").forEach(b => b.onclick = () => { S.sel = b.dataset.t; S.erro = ""; S.mtxt = $("#m").value.trim(); render() });
   on("#bsair", "onclick", sair);
   on("#bhab", "onclick", () => ir("habitual"));
   on("#bhe", "onclick", () => ir("he"));
